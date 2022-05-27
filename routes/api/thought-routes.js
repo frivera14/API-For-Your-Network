@@ -15,13 +15,15 @@ const {
 router
     .route('/')
     .get(getThoughts)
-    .post(createThought)
-    .delete(deleteThoughts)
+    .delete(deleteThoughts);
 router
     .route('/:id')
     .get(getSingleThought)
     .put(updateThought)
     .delete(deleteThought);
+router
+    .route('/:userId')
+    .post(createThought);
 router 
     .route('/:thoughtId/reactions')
     .put(addReaction);

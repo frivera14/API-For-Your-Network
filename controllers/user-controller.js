@@ -4,6 +4,8 @@ const userController = {
 
     getAllUsers(req, res) {
         User.find({})
+        .populate({ path: 'friends', select: '-__v'})
+        .select('-__v')
             .then(userData => res.json(userData))
             .catch(err => res.status(400).json(err))
     },
@@ -11,7 +13,6 @@ const userController = {
     getSingleUser({ params }, res) {
         User.findOne({ _id: params.id })
             .populate({
-                path: 'thoughts',
                 path: 'friends'
             })
             .then(userData => res.json(userData))

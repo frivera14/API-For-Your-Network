@@ -21,17 +21,17 @@ const thoughtController = {
         Thought.create(body)
             .then(({_id}) => {
                 return User.findOneAndUpdate(
-                    { _id: params.body.userId },
-                    { $push: { thoughts: _id }},
-                    { new: true, runValidators: true }
+                    { _id: params.userId },
+                    {$push: {thoughts: _id}},
+                    {new: true, runValidators: true}
                 )
             })
-            .then(userData => {
-                if (!userData) {
+            .then(thoughtData => {
+                if (!thoughtData) {
                     res.status(404).json({ message: 'No user found with this id!'})
                     return;
                 }
-                res.json(userData);
+                res.json(thoughtData);
             })
             .catch(err => res.json(err));
     },
