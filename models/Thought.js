@@ -8,12 +8,15 @@ const reactionSchema = new Schema({
     },
     reactionBody: {
         type: String,
-        requried: 'Body is required',
+        requried: true,
         maxlength: 280
     },
     username: {
         type: String,
-        required: 'Username required'
+        required: true
+    },
+    userId: {
+        type: String
     },
     createdAt: {
         type: Date,
@@ -30,19 +33,18 @@ const reactionSchema = new Schema({
 const ThoughtSchema = new Schema({
     thoughtText: {
         type: String,
-        required: 'Text is required',
+        required: true,
         minlength: 1,
         maxlength: 280
+    },
+    username: {
+        type: String,
+        required: true
     },
     createdAt: {
         type: Date,
         default: Date.now,
         get: (createdAtVal) => dateFormat(createdAtVal)
-    },
-    username: {
-        type: String,
-        required: 'username is required',
-        ref: 'User'
     },
     reactions: [reactionSchema]
 
@@ -54,6 +56,10 @@ const ThoughtSchema = new Schema({
     },
     id: false
 });
+
+ThoughtSchema.virtual('reactionCount').get(function() {
+    return this.reactions.length;
+})
 
 const Thought = model('Thought', ThoughtSchema);
 

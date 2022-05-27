@@ -11,22 +11,23 @@ const userController = {
     getSingleUser({ params }, res) {
         User.findOne({ _id: params.id })
             .populate({
-                path: 'thoughts'
+                path: 'thoughts',
+                path: 'friends'
             })
             .then(userData => res.json(userData))
             .catch(err => res.status(400).json(err))
     },
 
     createUser({ body }, res) {
-        User.create({ body })
+        User.create(body)
             .then(userData => res.json(userData))
             .catch(err => res.status(400).json(err))
     },
 
-    addFriend({body}, res) {
-        User.findByIdAndUpdate(
-            {_id: params.friendId},
-            { $push: { friends: body }},
+    addFriend({params}, res) {
+        User.findOneAndUpdate(
+            { _id: params.id},
+            { $push: { friends: params.friendId  }},
             { new: true, runValidators: true }
             )
             .then(userData => {
@@ -52,8 +53,8 @@ const userController = {
     deleteFriend({ params }, res) {
         User.findByIdAndUpdate(
             { _id: params.friendId },
-            { $pull: {friends: { friendId: params.friendId}}},
-            { new: true }
+            { $pull: {friends: params.friendId}},
+            { new: true, runValidators: true }
             )
             .then(userData => res.json(userData))
             .catch(err => res.status(400).json(err));
@@ -63,6 +64,12 @@ const userController = {
         User.findOneAndDelete({ _id: params.id })
             .then(userData => res.json(userData))
             .catch(err => res.status(400).json(err));
+    },
+
+    deleteAll(req, res) {
+        User.deleteMany({})
+        .then(userData => res.json(userData))
+        .catch(err => res.json(err))
     }
 
 
