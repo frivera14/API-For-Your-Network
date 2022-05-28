@@ -79,11 +79,7 @@ const thoughtController = {
                 if(!deletedThought) {
                     return res.status(404).json({ message: 'No thought found with this id'})
                 }
-                return User.findOneAndUpdate(
-                        {_id: params.userId},
-                        { $pull: {thoughts: params.thoughtId}},
-                        { new: true }
-                )
+                res.json(deletedThought)
             })
         .catch(err => res.status(400).json(err))
     },
