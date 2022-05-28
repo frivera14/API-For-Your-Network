@@ -5,6 +5,7 @@ const userController = {
     getAllUsers(req, res) {
         User.find({})
         .populate({ path: 'friends', select: '-__v'})
+        .populate({ path: 'thoughts', select: '-__v'})
         .select('-__v')
             .then(userData => res.json(userData))
             .catch(err => res.status(400).json(err))
@@ -53,7 +54,7 @@ const userController = {
 
     deleteFriend({ params }, res) {
         User.findByIdAndUpdate(
-            { _id: params.friendId },
+            { _id: params.id },
             { $pull: {friends: params.friendId}},
             { new: true, runValidators: true }
             )
